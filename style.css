@@ -96,3 +96,8 @@ ul li span{
 ul li span:hover{
     background: #edeef0;
 }
+li.dragging {
+    opacity: 0.5;
+    border: 2px dashed #002765;
+    background: #f9f9f9;
+}
