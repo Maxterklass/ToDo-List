@@ -101,3 +101,49 @@ li.dragging {
     border: 2px dashed #002765;
     background: #f9f9f9;
 }
+.add-subtask {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-subtask:hover {
+    background-color: #45a049;
+}
+ 
+/* Applique une position relative aux sous-tâches pour bien placer la croix */
+ul ul {
+    margin-left: 30px; /* Décalage des sous-tâches pour les imbriquer */
+    padding-left: 0;
+    position: relative;
+    list-style-type: none;
+    margin-left: 20px;
+    list-style-type: circle;
+}
+
+/* Ajout d'un style pour aligner les croix de suppression des sous-tâches */
+ul ul li {
+    position: relative;
+    padding: 8px 40px 8px 35px; /* Ajustement du padding */
+    font-size: 15px;
+}
+
+/* Ajustement des croix de suppression pour les sous-tâches */
+ul ul li span {
+    position: absolute;
+    right: 0;
+    top: 3px; /* Ajustement pour aligner parfaitement */
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+ul ul li span:hover {
+    background: #edeef0;
+}
