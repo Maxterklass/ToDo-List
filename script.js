@@ -3,7 +3,7 @@ const listContainer = document.getElementById("list-container");
 
 // Appeler AddTask lorsqu'on appuie sur "Entrée"
 inputBox.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") { // Vérifier si la touche appuyée est "Enter"
+    if (e.key === "Enter") {
         AddTask();
     }
 });
@@ -15,8 +15,19 @@ function AddTask() {
         let li = document.createElement("li");
         li.innerHTML = inputBox.value;
         li.setAttribute("draggable", "true"); // Rendre l'élément déplaçable
+
+        // Ajouter un bouton "+" pour ajouter des sous-tâches
+        let addSubTaskButton = document.createElement("button");
+        addSubTaskButton.innerHTML = "+";
+        addSubTaskButton.className = "add-subtask";
+        addSubTaskButton.onclick = function () {
+            addSubTask(li);
+        };
+
+        li.appendChild(addSubTaskButton);
         listContainer.appendChild(li);
 
+        // Ajouter la croix pour supprimer la tâche principale
         let span = document.createElement("span");
         span.innerHTML = "\u00d7";
         li.appendChild(span);
@@ -27,11 +38,36 @@ function AddTask() {
     saveData();
 }
 
+function addSubTask(parentTask) {
+    let subTaskText = prompt("Enter your sub-task:");
+    if (subTaskText) {
+        let subTaskList = parentTask.querySelector("ul");
+        if (!subTaskList) {
+            subTaskList = document.createElement("ul");
+            parentTask.appendChild(subTaskList);
+        }
+
+        let subTaskItem = document.createElement("li");
+        subTaskItem.innerHTML = subTaskText;
+
+        // Ajouter la croix pour supprimer la sous-tâche
+        let subTaskSpan = document.createElement("span");
+        subTaskSpan.innerHTML = "\u00d7";
+        subTaskItem.appendChild(subTaskSpan);
+
+        subTaskList.appendChild(subTaskItem);
+
+        saveData();
+    }
+}
+
 listContainer.addEventListener("click", function (e) {
     if (e.target.tagName === "LI") {
+        // Basculer l'état "checked" pour les tâches principales et les sous-tâches
         e.target.classList.toggle("checked");
         saveData();
     } else if (e.target.tagName === "SPAN") {
+        // Supprimer la tâche principale ou la sous-tâche
         e.target.parentElement.remove();
         saveData();
     }
@@ -46,6 +82,26 @@ function showTask() {
     let tasks = listContainer.querySelectorAll("li");
     tasks.forEach((task) => {
         addDragAndDropListeners(task); // Réappliquer les gestionnaires après rechargement
+
+        // Réattacher le bouton "+" pour les sous-tâches
+        let addSubTaskButton = task.querySelector(".add-subtask");
+        if (addSubTaskButton) {
+            addSubTaskButton.onclick = function () {
+                addSubTask(task);
+            };
+        }
+
+        // Réattacher les gestionnaires de suppression pour les sous-tâches
+        let subTasks = task.querySelectorAll("ul li");
+        subTasks.forEach((subTask) => {
+            let subTaskSpan = subTask.querySelector("span");
+            if (subTaskSpan) {
+                subTaskSpan.onclick = function () {
+                    subTask.remove();
+                    saveData();
+                };
+            }
+        });
     });
 }
 
